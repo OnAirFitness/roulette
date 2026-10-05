@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ON AIR FITNESS — Roulette</title>
+
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="ON AIR FITNESS — Tente ta chance et découvre ta récompense.">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 50% 35%, #292929 0%, #111 30%, #050505 68%);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* -------------------------
+       BACKGROUND
+    ------------------------- */
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.07;
+      background-image:
+        linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: linear-gradient(to bottom, black, transparent);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 25px 15px 40px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 620px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* -------------------------
+       BRAND
+    ------------------------- */
+
+    .brand {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 10px;
+      user-select: none;
+    }
+
+    .brand-main {
+      font-family: "Anton", Impact, sans-serif;
+      font-size: clamp(40px, 10vw, 65px);
+      line-height: .85;
+      letter-spacing: 2px;
+      transform: scaleX(1.08);
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      margin-top: 9px;
+      color: #e8e8e8;
+    }
+
+    /* -------------------------
+       INTRO
+    ------------------------- */
+
+    .headline {
+      margin: 25px 0 7px;
+      font-family: "Anton", Impact, sans-serif;
+      text-transform: uppercase;
+      font-size: clamp(28px, 7vw, 44px);
+      line-height: 1;
+      letter-spacing: 1px;
+    }
+
+    .headline span {
+      color: #ff1e25;
+    }
+
+    .subtitle {
+      margin: 0 auto 24px;
+      max-width: 460px;
+      color: #bdbdbd;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* -------------------------
+       WHEEL AREA
+    ------------------------- */
+
+    .wheel-wrapper {
+      width: min(88vw, 480px);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wheel-glow {
+      position: absolute;
+      width: 96%;
+      height: 96%;
+      border-radius: 50%;
+      background: #ff1e25;
+      filter: blur(35px);
+      opacity: .18;
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        transform: scale(.96);
+        opacity: .13;
+      }
+
+      50% {
+        transform: scale(1.04);
+        opacity: .25;
+      }
+    }
+
+    .wheel-border {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      padding: 7px;
+      background: linear-gradient(135deg, #fff, #555, #111, #fff);
+      box-shadow:
+        0 0 0 2px #000,
+        0 15px 45px rgba(0,0,0,.8);
+      z-index: 1;
+    }
+
+    .wheel-border::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      border: 2px solid #1a1a1a;
+      pointer-events: none;
+    }
+
+    canvas {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: block;
+    }
+
+    /* -------------------------
+       POINTER
+    ------------------------- */
+
+    .pointer {
+      position: absolute;
+      z-index: 20;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 40px solid #ff1e25;
+
+      filter:
+        drop-shadow(0 0 3px #fff)
+        drop-shadow(0 5px 8px rgba(0,0,0,.8));
+    }
+
+    .pointer::before {
+      content: "";
+      position: absolute;
+      left: -7px;
+      top: -39px;
+      width: 14px;
+      height: 7px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: .8;
+    }
+
+    /* -------------------------
+       SPIN BUTTON
+    ------------------------- */
+
+    .spin-button {
+      position: relative;
+      margin-top: 35px;
+
+      border: none;
+      outline: none;
+
+      padding: 17px 42px;
+
+      background: #ff1e25;
+      color: #fff;
+
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+
+      text-transform: uppercase;
+      letter-spacing: 1px;
+
+      border-radius: 4px;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 8px 0 #a80c10,
+        0 15px 30px rgba(255,30,37,.25);
+
+      transition:
+        transform .15s ease,
+        box-shadow .15s ease,
+        background .2s ease;
+    }
+
+    .spin-button:hover {
+      background: #ff3036;
+      transform: translateY(-2px);
+      box-shadow:
+        0 10px 0 #a80c10,
+        0 20px 35px rgba(255,30,37,.35);
+    }
+
+    .spin-button:active {
+      transform: translateY(5px);
+      box-shadow:
+        0 3px 0 #a80c10,
+        0 8px 15px rgba(255,30,37,.2);
+    }
+
+    .spin-button:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+      transform: none;
+      box-shadow: 0 5px 0 #555;
+      background: #555;
+    }
+
+    /* -------------------------
+       STATUS
+    ------------------------- */
+
+    .status {
+      min-height: 24px;
+      margin-top: 18px;
+      color: #aaa;
+      font-size: 12px;
+    }
+
+    /* -------------------------
+       FOOTER
+    ------------------------- */
+
+    .footer {
+      margin-top: 35px;
+      color: #666;
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    /* -------------------------
+       MODAL
+    ------------------------- */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding: 20px;
+
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(12px);
+
+      opacity: 0;
+      visibility: hidden;
+
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      width: min(92vw, 430px);
+      padding: 35px 25px 30px;
+
+      background:
+        linear-gradient(145deg, #1d1d1d, #090909);
+
+      border: 1px solid #333;
+      border-top: 4px solid #ff1e25;
+
+      border-radius: 8px;
+
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.9),
+        0 0 50px rgba(255,30,37,.12);
+
+      transform: scale(.8) translateY(30px);
+      transition: transform .45s cubic-bezier(.2,.8,.2,1);
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal.active .modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-card::before {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: #ff1e25;
+      filter: blur(100px);
+      opacity: .12;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .modal-label {
+      position: relative;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: #ff1e25;
+      text-transform: uppercase;
+    }
+
+    .modal-title {
+      position: relative;
+      font-family: "Anton", Impact, sans-serif;
+      font-size: 42px;
+      line-height: 1;
+      margin: 10px 0 22px;
+      text-transform: uppercase;
+    }
+
+    .reward-box {
+      position: relative;
+
+      padding: 24px 15px;
+
+      border: 1px solid #3b3b3b;
+      background: #111;
+
+      border-radius: 5px;
+
+      font-family: "Anton", Impact, sans-serif;
+      font-size: clamp(26px, 7vw, 38px);
+      line-height: 1.05;
+      text-transform: uppercase;
+
+      color: #fff;
+
+      box-shadow: inset 0 0 30px rgba(255,255,255,.025);
+    }
+
+    .reward-box span {
+      color: #ff1e25;
+    }
+
+    .modal-text {
+      color: #999;
+      font-size: 12px;
+      line-height: 1.6;
+      margin: 20px auto;
+      max-width: 300px;
+    }
+
+    .close-button {
+      border: none;
+      width: 100%;
+      padding: 15px;
+
+      background: #fff;
+      color: #000;
+
+      font-size: 13px;
+      font-weight: 900;
+
+      text-transform: uppercase;
+      letter-spacing: 1px;
+
+      border-radius: 4px;
+      cursor: pointer;
+
+      transition: .2s;
+    }
+
+    .close-button:hover {
+      background: #ff1e25;
+      color: #fff;
+    }
+
+    /* -------------------------
+       CONFETTI
+    ------------------------- */
+
+    .confetti {
+      position: fixed;
+      width: 9px;
+      height: 14px;
+      top: -20px;
+      z-index: 200;
+      pointer-events: none;
+      animation: confettiFall linear forwards;
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform:
+          translate3d(
+            var(--x),
+            110vh,
+            0
+          )
+          rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    /* -------------------------
+       MOBILE
+    ------------------------- */
+
+    @media (max-width: 500px) {
+
+      .page {
+        padding-top: 18px;
+      }
+
+      .brand-main {
+        font-size: 46px;
+      }
+
+      .headline {
+        font-size: 31px;
+        margin-top: 20px;
+      }
+
+      .subtitle {
+        font-size: 13px;
+        padding: 0 15px;
+        margin-bottom: 18px;
+      }
+
+      .wheel-wrapper {
+        width: min(88vw, 390px);
+      }
+
+      .spin-button {
+        margin-top: 27px;
+        width: min(88vw, 330px);
+      }
+
+      .footer {
+        margin-top: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <main class="container">
+
+    <!-- BRAND -->
+    <div class="brand">
+      <div class="brand-main">ON AIR</div>
+      <div class="brand-sub">FITNESS</div>
+    </div>
+
+    <!-- INTRO -->
+    <h1 class="headline">
+      <span>LET'S</span> SPIN
+    </h1>
+
+    <p class="subtitle">
+      Merci pour ta confiance 💪<br>
+      Tente ta chance et découvre ta récompense.
+    </p>
+
+    <!-- WHEEL -->
+    <div class="wheel-wrapper">
+
+      <div class="wheel-glow"></div>
+
+      <div class="wheel-border"></div>
+
+      <div class="pointer"></div>
+
+      <canvas id="wheelCanvas"></canvas>
+
+    </div>
+
+    <!-- BUTTON -->
+    <button
+      id="spinBtn"
+      class="spin-button"
+      type="button"
+    >
+      🎰 Lancer la roue
+    </button>
+
+    <div
+      id="status"
+      class="status"
+      aria-live="polite"
+    ></div>
+
+    <div class="footer">
+      Une seule participation par personne.<br>
+      Récompense à récupérer directement auprès de l'équipe ON AIR.
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- =========================
+     RESULT MODAL
+========================= -->
+
+<div
+  id="modal"
+  class="modal"
+  aria-hidden="true"
+>
+
+  <div class="modal-card">
+
+    <div class="modal-label">
+      ON AIR FITNESS
+    </div>
+
+    <div class="modal-title">
+      JACKPOT
+    </div>
+
+    <div
+      id="rewardBox"
+      class="reward-box"
+    ></div>
+
+    <p class="modal-text">
+      Félicitations 🎉<br>
+      Présente cet écran à l'équipe pour récupérer ta récompense.
+    </p>
+
+    <button
+      id="closeBtn"
+      class="close-button"
+      type="button"
+    >
+      C'est parti 🔥
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  /* ==========================================================
+     CONFIGURATION
+  ========================================================== */
+
+  const rewards = [
+
+    {
+      short: "SÉANCE<br>OFFERTE",
+      full: "Une séance offerte"
+    },
+
+    {
+      short: "UNE<br>PESÉE",
+      full: "Une pesée"
+    },
+
+    {
+      short: "BARRE<br>AU CHOIX",
+      full: "Une barre au choix"
+    },
+
+    {
+      short: "SHORT<br>AU CHOIX",
+      full: "Un short au choix"
+    },
+
+    {
+      short: "UN<br>CADENG",
+      full: "Un Cadeng"
+    },
+
+    {
+      short: "TOUR<br>DE COU",
+      full: "Un tour de cou"
+    },
+
+    {
+      short: "1 MOIS<br>WATER SPORT",
+      full: "Un mois de sport Water"
+    },
+
+    {
+      short: "-5€ SUR<br>UN PRÉLÈVEMENT",
+      full: "-5 € sur un prélèvement"
+    }
+
+  ];
+
+
+  /* ==========================================================
+     DOM
+  ========================================================== */
+
+  const canvas = document.getElementById("wheelCanvas");
+  const ctx = canvas.getContext("2d");
+
+  const spinBtn = document.getElementById("spinBtn");
+  const status = document.getElementById("status");
+
+  const modal = document.getElementById("modal");
+  const rewardBox = document.getElementById("rewardBox");
+  const closeBtn = document.getElementById("closeBtn");
+
+
+  /* ==========================================================
+     CANVAS
+  ========================================================== */
+
+  const size = 700;
+
+  canvas.width = size;
+  canvas.height = size;
+
+  const center = size / 2;
+  const radius = size / 2 - 8;
+
+  const arc = (Math.PI * 2) / rewards.length;
+
+
+  /* ==========================================================
+     COLORS
+  ========================================================== */
+
+  const colors = [
+    "#111111",
+    "#ff1e25",
+    "#111111",
+    "#ff1e25",
+    "#111111",
+    "#ff1e25",
+    "#111111",
+    "#ff1e25"
+  ];
+
+
+  /* ==========================================================
+     GAME STATE
+  ========================================================== */
+
+  let startAngle = 0;
+
+  let isSpinning = false;
+
+  let currentRotation = 0;
+
+  const PLAY_KEY = "onair_roulette_played_v1";
+
+
+  /* ==========================================================
+     CHECK IF USER ALREADY PLAYED
+  ========================================================== */
+
+  function checkPlayed() {
+
+    if (localStorage.getItem(PLAY_KEY) === "true") {
+
+      spinBtn.disabled = true;
+
+      spinBtn.innerHTML = "✓ DÉJÀ PARTICIPÉ";
+
+      status.textContent =
+        "Tu as déjà utilisé ta participation.";
+
+    }
+
+  }
+
+  checkPlayed();
+
+
+  /* ==========================================================
+     DRAW WHEEL
+  ========================================================== */
+
+  function drawWheel() {
+
+    ctx.clearRect(0, 0, size, size);
+
+    /* Outer shadow */
+
+    ctx.save();
+
+    ctx.beginPath();
+
+    ctx.arc(
+      center,
+      center,
+      radius,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.shadowColor = "rgba(0,0,0,.8)";
+    ctx.shadowBlur = 25;
+    ctx.shadowOffsetY = 10;
+
+    ctx.fillStyle = "#111";
+
+    ctx.fill();
+
+    ctx.restore();
+
+
+    /* Segments */
+
+    for (let i = 0; i < rewards.length; i++) {
+
+      const angle = startAngle + i * arc;
+
+      ctx.beginPath();
+
+      ctx.moveTo(center, center);
+
+      ctx.arc(
+        center,
+        center,
+        radius,
+        angle,
+        angle + arc
+      );
+
+      ctx.closePath();
+
+      ctx.fillStyle = colors[i];
+
+      ctx.fill();
+
+      /* Segment borders */
+
+      ctx.strokeStyle = "#fff";
+
+      ctx.lineWidth = 3;
+
+      ctx.stroke();
+
+
+      /* Text */
+
+      ctx.save();
+
+      const textAngle =
+        angle + arc / 2;
+
+      const textRadius = radius * 0.63;
+
+      const x =
+        center +
+        Math.cos(textAngle) *
+        textRadius;
+
+      const y =
+        center +
+        Math.sin(textAngle) *
+        textRadius;
+
+      ctx.translate(x, y);
+
+      ctx.rotate(textAngle);
+
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      ctx.fillStyle = "#fff";
+
+      ctx.font =
+        "900 25px Inter, Arial";
+
+      const lines =
+        rewards[i].short.split("<br>");
+
+      lines.forEach((line, index) => {
+
+        const offset =
+          (index - (lines.length - 1) / 2) * 30;
+
+        ctx.fillText(
+          line,
+          0,
+          offset
+        );
+
+      });
+
+      ctx.restore();
+
+    }
+
+
+    /* Center circle */
+
+    ctx.beginPath();
+
+    ctx.arc(
+      center,
+      center,
+      65,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fillStyle = "#050505";
+
+    ctx.fill();
+
+    ctx.strokeStyle = "#fff";
+
+    ctx.lineWidth = 5;
+
+    ctx.stroke();
+
+
+    /* Center logo */
+
+    ctx.save();
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillStyle = "#fff";
+
+    ctx.font =
+      "900 24px Anton, Impact";
+
+    ctx.fillText(
+      "ON AIR",
+      center,
+      center - 5
+    );
+
+    ctx.font =
+      "900 9px Inter, Arial";
+
+    ctx.letterSpacing = "3px";
+
+    ctx.fillText(
+      "FITNESS",
+      center,
+      center + 20
+    );
+
+    ctx.restore();
+
+
+    /* Outer ring */
+
+    ctx.beginPath();
+
+    ctx.arc(
+      center,
+      center,
+      radius - 3,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.strokeStyle = "#fff";
+
+    ctx.lineWidth = 5;
+
+    ctx.stroke();
+
+  }
+
+
+  /* ==========================================================
+     SPIN
+  ========================================================== */
+
+  function spinWheel() {
+
+    if (isSpinning) return;
+
+    if (localStorage.getItem(PLAY_KEY) === "true") {
+
+      status.textContent =
+        "Tu as déjà utilisé ta participation.";
+
+      return;
+
+    }
+
+
+    isSpinning = true;
+
+    spinBtn.disabled = true;
+
+    status.textContent =
+      "La roue tourne...";
+
+
+    /* Random target */
+
+    const winningIndex =
+      Math.floor(
+        Math.random() *
+        rewards.length
+      );
+
+
+    /*
+      We calculate a final rotation
+      that puts the selected reward
+      exactly under the pointer.
+    */
+
+    const pointerAngle =
+      -Math.PI / 2;
+
+
+    const segmentCenter =
+      winningIndex * arc +
+      arc / 2;
+
+
+    const desiredAngle =
+      pointerAngle -
+      segmentCenter;
+
+
+    const extraTurns =
+      6 + Math.floor(Math.random() * 3);
+
+
+    const finalAngle =
+      desiredAngle +
+      extraTurns * Math.PI * 2;
+
+
+    const startRotation =
+      startAngle;
+
+
+    const duration = 4800;
+
+    const startTime =
+      performance.now();
+
+
+    function animate(now) {
+
+      const elapsed =
+        now - startTime;
+
+
+      const progress =
+        Math.min(
+          elapsed / duration,
+          1
+        );
+
+
+      /*
+        Smooth cubic ease-out.
+        Fast at the beginning,
+        very slow at the end.
+      */
+
+      const eased =
+        1 -
+        Math.pow(
+          1 - progress,
+          4
+        );
+
+
+      startAngle =
+        startRotation +
+        (finalAngle - startRotation) *
+        eased;
+
+
+      drawWheel();
+
+
+      if (progress < 1) {
+
+        requestAnimationFrame(animate);
+
+      } else {
+
+        finishSpin(winningIndex);
+
+      }
+
+    }
+
+
+    requestAnimationFrame(animate);
+
+  }
+
+
+  /* ==========================================================
+     FINISH
+  ========================================================== */
+
+  function finishSpin(index) {
+
+    isSpinning = false;
+
+    currentRotation = startAngle;
+
+
+    /* Save participation */
+
+    localStorage.setItem(
+      PLAY_KEY,
+      "true"
+    );
+
+
+    /* Status */
+
+    status.textContent =
+      "Félicitations ! 🔥";
+
+
+    /* Reward */
+
+    rewardBox.innerHTML =
+      rewards[index].full
+        .replace(
+          /(-5 €|5 €)/,
+          "<span>$1</span>"
+        );
+
+
+    /* Confetti */
+
+    launchConfetti();
+
+
+    /* Open modal after tiny delay */
+
+    setTimeout(() => {
+
+      modal.classList.add("active");
+
+      modal.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+    }, 250);
+
+
+    /* Final button */
+
+    spinBtn.innerHTML =
+      "✓ PARTICIPATION UTILISÉE";
+
+  }
+
+
+  /* ==========================================================
+     CONFETTI
+  ========================================================== */
+
+  function launchConfetti() {
+
+    const pieces = 100;
+
+    for (
+      let i = 0;
+      i < pieces;
+      i++
+    ) {
+
+      const piece =
+        document.createElement("div");
+
+      piece.className =
+        "confetti";
+
+
+      const random =
+        Math.random();
+
+
+      if (random < .5) {
+
+        piece.style.background =
+          "#ff1e25";
+
+      } else {
+
+        piece.style.background =
+          "#fff";
+
+      }
+
+
+      piece.style.left =
+        Math.random() * 100 + "vw";
+
+
+      piece.style.setProperty(
+        "--x",
+        (Math.random() * 400 - 200) + "px"
+      );
+
+
+      piece.style.animationDuration =
+        (2 + Math.random() * 2) + "s";
+
+
+      piece.style.animationDelay =
+        Math.random() * .4 + "s";
+
+
+      piece.style.transform =
+        `rotate(${Math.random() * 360}deg)`;
+
+
+      document.body.appendChild(piece);
+
+
+      setTimeout(() => {
+
+        piece.remove();
+
+      }, 4500);
+
+    }
+
+  }
+
+
+  /* ==========================================================
+     CLOSE MODAL
+  ========================================================== */
+
+  closeBtn.addEventListener(
+    "click",
+    () => {
+
+      modal.classList.remove(
+        "active"
+      );
+
+      modal.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+    }
+  );
+
+
+  /* Close when clicking outside */
+
+  modal.addEventListener(
+    "click",
+    (event) => {
+
+      if (
+        event.target === modal
+      ) {
+
+        modal.classList.remove(
+          "active"
+        );
+
+        modal.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+      }
+
+    }
+  );
+
+
+  /* ==========================================================
+     BUTTON
+  ========================================================== */
+
+  spinBtn.addEventListener(
+    "click",
+    spinWheel
+  );
+
+
+  /* ==========================================================
+     INITIAL DRAW
+  ========================================================== */
+
+  drawWheel();
+
+</script>
+
+</body>
+</html>
